@@ -13,7 +13,7 @@ is because:
 - a maximum of only 16 tiles are required in the tileset (you could cut that number down to 6 if your tiles have symmetry)
 - the tiles align with the world grid
 
-One could also argue it's more effecient since each tile only checks 4 neighbours as opposed to 9 🤯. But haven't done any performance testing so no promises 😅.
+One could also argue it's more efficient since each tile only checks 4 neighbours as opposed to 9 🤯. But haven't done any performance testing so no promises 😅.
 
 Just like Oskar, I don't understand why this isn't more popular!
 
