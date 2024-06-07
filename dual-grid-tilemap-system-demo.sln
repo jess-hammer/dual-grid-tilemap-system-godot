@@ -1,0 +1,19 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dual-grid-tilemap-system-demo", "dual-grid-tilemap-system-demo.csproj", "{87FC3CC6-B5F4-4757-890C-A3D23AB3A447}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87FC3CC6-B5F4-4757-890C-A3D23AB3A447}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87FC3CC6-B5F4-4757-890C-A3D23AB3A447}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87FC3CC6-B5F4-4757-890C-A3D23AB3A447}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{87FC3CC6-B5F4-4757-890C-A3D23AB3A447}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{87FC3CC6-B5F4-4757-890C-A3D23AB3A447}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{87FC3CC6-B5F4-4757-890C-A3D23AB3A447}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal
