@@ -32,8 +32,8 @@ public partial class DualGridTilemap : TileMap {
 		{new (Dirt, Dirt, Dirt, Dirt), new Vector2I(0, 3)},
     };
 
-    [Export] Vector2I grassPlaceholderAtlasCoord;
-    [Export] Vector2I dirtPlaceholderAtlasCoord;
+    [Export] public Vector2I grassPlaceholderAtlasCoord;
+    [Export] public Vector2I dirtPlaceholderAtlasCoord;
 
     public override void _Ready() {
         base._Ready();
