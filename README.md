@@ -5,7 +5,7 @@
 
 https://github.com/jess-hammer/dual-grid-tilemap-system-godot/assets/59108399/74928b50-8bc5-4ace-bb97-4f400e86d65a
 
-Long story short, it does NOT use terrain tiles but rather, a custom script that inherits from `TileMap`! Also worth notings, instead of two seperate TileMaps, only one TileMap with 2 layers is used. Since you can't offset the layers individually, the tiles themselves are offset (which you can find in the TileSet settings).
+Long story short, it does NOT use terrain tiles but rather, a custom script that inherits from `TileMap`! Also worth noting, instead of two seperate TileMaps, only one TileMap with 2 layers is used. Since you can't offset the layers individually, the tiles themselves are offset (which you can find in the TileSet settings).
 
 The main reasons I love the dual-grid approach as opposed to regular terrain tiles/auto tiles 
 is because:
@@ -15,11 +15,13 @@ is because:
 
 One could also argue it's more efficient, since each tile only checks 4 neighbours as opposed to 8. But I haven't done any performance testing so no promises.
 
-Anyway, just like Oskar...I don't understand why the dual-grid method isn't more popular! 
+I also made a version for Unity which you can find [here](https://github.com/jess-hammer/dual-grid-tilemap-system-unity)
 
 ### References
 
 See Oskar Stålberg's original proposition of a dual-grid system: https://x.com/OskSta/status/1448248658865049605
+
+Just like Oskar...I don't understand why the dual-grid method isn't more popular! 
 
 Regular tile cut:
 
