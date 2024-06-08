@@ -5,7 +5,7 @@
 
 https://github.com/jess-hammer/dual-grid-tilemap-system-godot/assets/59108399/74928b50-8bc5-4ace-bb97-4f400e86d65a
 
-Long story short, it does NOT use terrain tiles but rather, a custom script that inherits from `TileMap`!
+Long story short, it does NOT use terrain tiles but rather, a custom script that inherits from `TileMap`! Also worth notings, instead of two seperate TileMaps, only one TileMap with 2 layers is used. Since you can't offset the layers individually, the tiles themselves are offset (which you can find in the TileSet settings).
 
 The main reasons I love the dual-grid approach as opposed to regular terrain tiles/auto tiles 
 is because:
