@@ -5,7 +5,7 @@
 
 https://github.com/jess-hammer/dual-grid-tilemap-system-godot/assets/59108399/74928b50-8bc5-4ace-bb97-4f400e86d65a
 
-Long story short, it does NOT use terrain tiles but rather, a custom C# script that inherits from `TileMap`!
+Long story short, it does NOT use terrain tiles but rather, a custom script that inherits from `TileMap`!
 
 The main reasons I love the dual-grid approach as opposed to regular terrain tiles/auto tiles 
 is because:
@@ -13,9 +13,9 @@ is because:
 - a maximum of only 16 tiles are required in the tileset (you could cut that number down to 6 if your tiles have symmetry)
 - the tiles align with the world grid
 
-One could also argue it's more efficient since each tile only checks 4 neighbours as opposed to 9 🤯. But haven't done any performance testing so no promises 😅.
+One could also argue it's more efficient, since each tile only checks 4 neighbours as opposed to 8. But I haven't done any performance testing so no promises.
 
-Just like Oskar, I don't understand why this isn't more popular!
+Anyway, just like Oskar...I don't understand why the dual-grid method isn't more popular! 
 
 ### References
 
