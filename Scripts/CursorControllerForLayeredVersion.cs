@@ -1,7 +1,7 @@
 using Godot;
 
-public partial class CursorController : Node2D {
-    [Export] DualGridTilemap dualGridTilemap;
+public partial class CursorControllerForLayeredVersion : Node2D {
+    [Export] DualGridTilemapWithLayers dualGridTilemap;
     public override void _Process(double delta) {
         Vector2I coords = dualGridTilemap.LocalToMap(Position);
         if (Input.IsActionPressed("left_click")) {

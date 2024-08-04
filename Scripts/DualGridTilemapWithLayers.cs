@@ -3,14 +3,14 @@ using System;
 using System.Collections.Generic;
 using static TileType;
 
-public partial class DualGridTilemap : TileMap {
-    [Export] TileMap displayTilemap;
-    private Vector2 offset = new Vector2(0.5f, 0.5f);
-    protected static Vector2[] NEIGHBOURS = new Vector2[] {
-        new(-0.5f, -0.5f),
-        new(0.5f, -0.5f),
-        new(-0.5f, 0.5f),
-        new(0.5f, 0.5f),
+public partial class DualGridTilemapWithLayers : TileMap {
+    public static int MAIN_LAYER = 0;
+    public static int DISPLAY_LAYER = 1;
+    protected static Vector2I[] NEIGHBOURS = new Vector2I[] {
+        new Vector2I(0, 0),
+        new Vector2I(1, 0),
+        new Vector2I(0, 1),
+        new Vector2I(1, 1)
     };
 
     protected static readonly Dictionary<Tuple<TileType, TileType, TileType, TileType>, Vector2I> neighbourTupleToAtlasCoord = new() {
@@ -46,27 +46,25 @@ public partial class DualGridTilemap : TileMap {
     }
 
     protected void setDisplayTile(Vector2I pos) {
-        // loop through 4 display neighbours
         for (int i = 0; i < NEIGHBOURS.Length; i++) {
-            Vector2I newPos = (Vector2I)(pos + NEIGHBOURS[i] + offset);
-            displayTilemap.SetCell(0, newPos, 1, calculateDisplayTile(newPos));
+            Vector2I newPos = pos + NEIGHBOURS[i];
+            base.SetCell(DISPLAY_LAYER, newPos, 0, calculateTile(newPos));
         }
     }
 
-    protected Vector2I calculateDisplayTile(Vector2I coords) {
-        // get 4 world tile neighbours
-        TileType botRight = getWorldTile((Vector2I)(coords - NEIGHBOURS[0] - offset));
-        TileType botLeft = getWorldTile((Vector2I)(coords - NEIGHBOURS[1] - offset));
-        TileType topRight = getWorldTile((Vector2I)(coords - NEIGHBOURS[2] - offset));
-        TileType topLeft = getWorldTile((Vector2I)(coords - NEIGHBOURS[3] - offset));
+    protected Vector2I calculateTile(Vector2I coords) {
+        // 4 neighbours
+        TileType topLeft = getTileType(GetCellAtlasCoords(0, coords + new Vector2I(-1, -1)));
+        TileType topRight = getTileType(GetCellAtlasCoords(0, coords + new Vector2I(0, -1)));
+        TileType botLeft = getTileType(GetCellAtlasCoords(0, coords + new Vector2I(-1, 0)));
+        TileType botRight = getTileType(GetCellAtlasCoords(0, coords + new Vector2I(0, 0)));
 
         Tuple<TileType, TileType, TileType, TileType> neighbourTuple = new(topLeft, topRight, botLeft, botRight);
 
         return neighbourTupleToAtlasCoord[neighbourTuple];
     }
 
-    private TileType getWorldTile(Vector2I coords) {
-        Vector2I atlasCoord = GetCellAtlasCoords(0, coords);
+    private TileType getTileType(Vector2I atlasCoord) {
         if (atlasCoord == grassPlaceholderAtlasCoord)
             return Grass;
         else
@@ -74,14 +72,8 @@ public partial class DualGridTilemap : TileMap {
     }
 
     public void RefreshDisplayLayer() {
-        foreach (Vector2I coord in GetUsedCells(0)) {
+        foreach (Vector2I coord in GetUsedCells(MAIN_LAYER)) {
             setDisplayTile(coord);
         }
     }
-}
-
-public enum TileType {
-    None,
-    Grass,
-    Dirt
 }
