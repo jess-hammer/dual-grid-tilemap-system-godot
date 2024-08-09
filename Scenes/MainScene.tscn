@@ -94,7 +94,6 @@ scale = Vector2(1.35937, 0.753906)
 texture = ExtResource("6_e78ew")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="CheckButton" type="CheckButton" parent="CanvasLayer" node_paths=PackedStringArray("gridSprite")]
 offset_left = 7.0

@@ -1,11 +1,10 @@
 # ✨👯 Dual-grid tilemap system in Godot 👯✨
 
-#### This is a demo of how I implemented a dual-grid tilemap system in Godot 4.2. Hope it helps!
+#### This is a demo of how I implemented a simple dual-grid tilemap system in Godot 4.2. Hope it helps!
 
+https://github.com/user-attachments/assets/a5532595-3278-49a7-a3a7-e9aa1f6fd15e
 
-https://github.com/jess-hammer/dual-grid-tilemap-system-godot/assets/59108399/74928b50-8bc5-4ace-bb97-4f400e86d65a
-
-Long story short, it does NOT use terrain tiles but rather, a custom script that inherits from `TileMap`! Also worth noting, instead of two seperate TileMaps, only one TileMap with 2 layers is used. Since you can't offset the layers individually, the tiles themselves are offset (which you can find in the TileSet settings).
+Long story short, it does NOT use terrain tiles but acts very similarly to them. It's just a custom script that inherits from `TileMap`! The MainScene shows how it's done with two seperate Tilemaps, and there is also another scene showing how it's done with tilemap layers instead. Since you can't offset the layers individually, the tiles themselves are offset (which you can find in the TileSet settings).
 
 The main reasons I love the dual-grid approach as opposed to regular terrain tiles/auto tiles 
 is because:
