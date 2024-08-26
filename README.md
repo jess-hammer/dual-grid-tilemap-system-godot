@@ -1,6 +1,8 @@
 # ✨👯 Dual-grid tilemap system in Godot 👯✨
 
-#### This is a demo of how I implemented a simple dual-grid tilemap system in Godot 4.2. Hope it helps!
+#### This is a demo of how I implemented a simple dual-grid tilemap system in Godot 4.2 Mono using C#. Hope it helps!
+
+If you are looking for a GDScript version, you can find one [here](https://github.com/GlitchedinOrbit/dual-grid-tilemap-system-godot-gdscript)
 
 https://github.com/user-attachments/assets/a5532595-3278-49a7-a3a7-e9aa1f6fd15e
 
