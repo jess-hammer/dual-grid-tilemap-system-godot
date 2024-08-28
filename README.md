@@ -2,7 +2,9 @@
 
 #### This is a demo of how I implemented a simple dual-grid tilemap system in Godot 4.2 Mono using C#. Hope it helps!
 
-If you are looking for a GDScript version, you can find one [here](https://github.com/GlitchedinOrbit/dual-grid-tilemap-system-godot-gdscript)
+If you are looking for a GDScript version, here are some I recommend:
+- Godot 4.2: [https://github.com/GlitchedinOrbit/dual-grid-tilemap-system-godot-gdscript](https://github.com/GlitchedinOrbit/dual-grid-tilemap-system-godot-gdscript)
+- Godot 4.3: [https://github.com/pablogila/TileMapDual_godot_node](https://github.com/pablogila/TileMapDual_godot_node) <-- this one also enables refreshing tiles from the editor!
 
 https://github.com/user-attachments/assets/a5532595-3278-49a7-a3a7-e9aa1f6fd15e
 
