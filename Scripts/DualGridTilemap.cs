@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using static TileType;
 
-public partial class DualGridTilemap : TileMap {
-    [Export] TileMap displayTilemap;
+public partial class DualGridTilemap : Node2D {
+    [Export] TileMapLayer worldMapLayer;
+    [Export] TileMapLayer displayMapLayer;
     [Export] public Vector2I grassPlaceholderAtlasCoord;
     [Export] public Vector2I dirtPlaceholderAtlasCoord;
     readonly Vector2I[] NEIGHBOURS = new Vector2I[] { new(0, 0), new(1, 0), new(0, 1), new(1, 1) };
@@ -30,13 +31,21 @@ public partial class DualGridTilemap : TileMap {
 
     public override void _Ready() {
         // Refresh all display tiles
-        foreach (Vector2I coord in GetUsedCells(0)) {
+        foreach (Vector2I coord in worldMapLayer.GetUsedCells()) {
             setDisplayTile(coord);
         }
     }
 
+    /// <summary>
+    /// <para>Returns the map coordinates of the cell containing the given <paramref name="localPosition"/>. If <paramref name="localPosition"/> is in global coordinates, consider using <see cref="Godot.Node2D.ToLocal(Vector2)"/> before passing it to this method. See also <see cref="Godot.TileMapLayer.MapToLocal(Vector2I)"/>.</para>
+    /// </summary>
+    public Vector2I LocalToMap(Vector2 pos)
+    {
+        return worldMapLayer.LocalToMap(pos);
+    }
+
     public void SetTile(Vector2I coords, Vector2I atlasCoords) {
-        SetCell(0, coords, 0, atlasCoords);
+        worldMapLayer.SetCell(coords, 0, atlasCoords);
         setDisplayTile(coords);
     }
 
@@ -44,7 +53,7 @@ public partial class DualGridTilemap : TileMap {
         // loop through 4 display neighbours
         for (int i = 0; i < NEIGHBOURS.Length; i++) {
             Vector2I newPos = pos + NEIGHBOURS[i];
-            displayTilemap.SetCell(0, newPos, 1, calculateDisplayTile(newPos));
+            displayMapLayer.SetCell(newPos, 1, calculateDisplayTile(newPos));
         }
     }
 
@@ -60,7 +69,7 @@ public partial class DualGridTilemap : TileMap {
     }
 
     TileType getWorldTile(Vector2I coords) {
-        Vector2I atlasCoord = GetCellAtlasCoords(0, coords);
+        Vector2I atlasCoord = worldMapLayer.GetCellAtlasCoords(coords);
         if (atlasCoord == grassPlaceholderAtlasCoord)
             return Grass;
         else
