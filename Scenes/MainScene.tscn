@@ -1,16 +1,16 @@
 [gd_scene load_steps=23 format=3 uid="uid://c5ls7dpx7j1i8"]
 
 [ext_resource type="TileSet" uid="uid://ydwe2v6t82bg" path="res://Assets/DemoTileSet.tres" id="1_0ynk6"]
-[ext_resource type="Script" path="res://Scripts/DualGridTilemap.cs" id="2_13b5n"]
+[ext_resource type="Script" uid="uid://fcdprrr4whr4" path="res://Scripts/DualGridTilemap.cs" id="2_13b5n"]
 [ext_resource type="Texture2D" uid="uid://83u81ntvymi0" path="res://Assets/Plant.png" id="3_k20ru"]
 [ext_resource type="Texture2D" uid="uid://d2nmls3fv38yp" path="res://Assets/SelectionIndicator.png" id="3_l145t"]
-[ext_resource type="Script" path="res://Scripts/CursorController.cs" id="5_7u4k6"]
+[ext_resource type="Script" uid="uid://kb1dhmb5ao2c" path="res://Scripts/CursorController.cs" id="5_7u4k6"]
 [ext_resource type="Shader" uid="uid://dmw8ht36lmm8h" path="res://Shaders/GridShader.tres" id="6_atlul"]
 [ext_resource type="Texture2D" uid="uid://d00ou7t5q3kk1" path="res://Assets/Blank.png" id="6_e78ew"]
 [ext_resource type="FontFile" uid="uid://cn7lcp67itnll" path="res://Assets/Mitochondria.ttf" id="8_6gevf"]
 [ext_resource type="Texture2D" uid="uid://diqe0iyepv7wm" path="res://Assets/Checked.png" id="9_etm7v"]
 [ext_resource type="Texture2D" uid="uid://cx24tg58etx4e" path="res://Assets/Unchecked.png" id="10_iatsy"]
-[ext_resource type="Script" path="res://Scripts/ToggleGrid.cs" id="11_d4fye"]
+[ext_resource type="Script" uid="uid://b4nub01dob7u3" path="res://Scripts/ToggleGrid.cs" id="11_d4fye"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0c6q5"]
 texture = ExtResource("3_k20ru")
@@ -44,15 +44,15 @@ animations = [{
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qlr4v"]
 shader = ExtResource("6_atlul")
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_spsbf"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ypi1m"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wdufr"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_htkxr"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4vxu8"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_htkxr"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wdufr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ypi1m"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_spsbf"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -100,20 +100,20 @@ offset_left = 7.0
 offset_top = 4.0
 offset_right = 185.0
 offset_bottom = 36.0
-theme_override_colors/font_color = Color(0.4, 0.176471, 0.290196, 1)
-theme_override_colors/font_pressed_color = Color(0.4, 0.176471, 0.290196, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.4, 0.176471, 0.290196, 1)
-theme_override_colors/font_focus_color = Color(0.4, 0.176471, 0.290196, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(0.4, 0.176471, 0.290196, 1)
+theme_override_colors/font_focus_color = Color(0.4, 0.176471, 0.290196, 1)
+theme_override_colors/font_pressed_color = Color(0.4, 0.176471, 0.290196, 1)
 theme_override_constants/outline_size = 2
 theme_override_fonts/font = ExtResource("8_6gevf")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_htkxr")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_4vxu8")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_wdufr")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_ypi1m")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_spsbf")
 theme_override_icons/checked = ExtResource("9_etm7v")
 theme_override_icons/unchecked = ExtResource("10_iatsy")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_spsbf")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_ypi1m")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_wdufr")
-theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_4vxu8")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_htkxr")
 text = "Toggle grid"
 script = ExtResource("11_d4fye")
 gridSprite = NodePath("../../GridShader")
