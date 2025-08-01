@@ -1,14 +1,19 @@
 # ✨👯 Dual-grid tilemap system in Godot 👯✨
 
-#### This is a demo of how I implemented a simple dual-grid tilemap system in Godot 4.2 Mono using C#. Hope it helps!
+This is a demo of how I implemented a simple dual-grid tilemap system in Godot 4.4.1 Mono using C#. Hope it helps!
 
-If you are looking for a GDScript version, here are some I recommend:
+### ⚠️ Important: consider these other (possibly better) dual-grid implementations
+If you are looking for a non-mono (GDScript) version, or a version that allows you to refresh tiles from the editor, here are some I recommend:
 - Godot 4.2: [https://github.com/GlitchedinOrbit/dual-grid-tilemap-system-godot-gdscript](https://github.com/GlitchedinOrbit/dual-grid-tilemap-system-godot-gdscript)
-- Godot 4.3: [https://github.com/pablogila/TileMapDual_godot_node](https://github.com/pablogila/TileMapDual_godot_node) <-- this one also enables refreshing tiles from the editor!
+- Godot 4.4: [https://github.com/pablogila/TileMapDual_godot_node](https://github.com/pablogila/TileMapDual_godot_node) <-- this one also supports isometric and hex tiles!
+
+# 
+
+Otherwise, here's what mine looks like:
 
 https://github.com/user-attachments/assets/a5532595-3278-49a7-a3a7-e9aa1f6fd15e
 
-Long story short, it does NOT use terrain tiles but acts very similarly to them. It's just a custom script that inherits from `TileMap`! The MainScene shows how it's done with two seperate Tilemaps, and there is also another scene showing how it's done with tilemap layers instead. Since you can't offset the layers individually, the tiles themselves are offset (which you can find in the TileSet settings).
+Long story short, it does NOT use terrain tiles but acts very similarly to them. It's just a [custom Node2D](./Scripts/DualGridTilemap.cs) that manages a "world" `TileMapLayer` and a "display" `TileMapLayer`! The logic to determine which tile to display is controlled by a set of 16 hard-coded rules.
 
 The main reasons I love the dual-grid approach as opposed to regular terrain tiles/auto tiles 
 is because:
