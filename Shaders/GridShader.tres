@@ -1,6 +1,6 @@
 [gd_resource type="VisualShader" load_steps=18 format=3 uid="uid://dmw8ht36lmm8h"]
 
-[ext_resource type="Script" path="res://Shaders/VisualShaderNodePixelize.gd" id="1_4lioj"]
+[ext_resource type="Script" uid="uid://c6cbodqrch18h" path="res://Shaders/VisualShaderNodePixelize.gd" id="1_4lioj"]
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_6tnby"]
 output_port_for_preview = 0
@@ -68,7 +68,7 @@ render_mode blend_mix;
 
 
 // Varyings
-varying vec2 WorldPos;
+varying vec2 var_WorldPos;
 
 
 
@@ -97,14 +97,14 @@ void vertex() {
 
 
 // VaryingSetter:5
-	WorldPos = vec2(n_out4p0.xy);
+	var_WorldPos = vec2(n_out4p0.xy);
 
 
 }
 
 void fragment() {
 // VaryingGetter:2
-	vec2 n_out2p0 = WorldPos;
+	vec2 n_out2p0 = var_WorldPos;
 
 
 	vec2 n_out26p0;
