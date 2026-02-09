@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bs0pfrog57go5"
-path="res://.godot/imported/TilemapPlaceholders.png-219932b8262022da1f27b16a33b8dce9.ctex"
+uid="uid://cxr5n0osayqoa"
+path="res://.godot/imported/DemoGrassTiles.png-2250b5b149afb478e99d3621c6fd74b1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/TilemapPlaceholders.png"
-dest_files=["res://.godot/imported/TilemapPlaceholders.png-219932b8262022da1f27b16a33b8dce9.ctex"]
+source_file="res://Assets/DemoGrassTiles.png"
+dest_files=["res://.godot/imported/DemoGrassTiles.png-2250b5b149afb478e99d3621c6fd74b1.ctex"]
 
 [params]
 

@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=18 format=3 uid="uid://dmw8ht36lmm8h"]
+[gd_resource type="VisualShader" format=3 uid="uid://dmw8ht36lmm8h"]
 
 [ext_resource type="Script" uid="uid://c6cbodqrch18h" path="res://Shaders/VisualShaderNodePixelize.gd" id="1_4lioj"]
 
@@ -63,111 +63,6 @@ varying_name = "WorldPos"
 varying_type = 3
 
 [resource]
-code = "shader_type canvas_item;
-render_mode blend_mix;
-
-
-// Varyings
-varying vec2 var_WorldPos;
-
-
-
-// Pixelize
-
-		float floatPixelate(float f, float amount) {
-			return floor(f * amount) / amount;
-		}
-
-		vec2 pixelate(vec2 P, float amount) {
-			return vec2(floatPixelate(P.x, amount), floatPixelate(P.y, amount));
-		}
-	
-
-void vertex() {
-// Input:3
-	mat4 n_out3p0 = MODEL_MATRIX;
-
-
-// Input:2
-	vec2 n_out2p0 = VERTEX;
-
-
-// TransformVectorMult:4
-	vec3 n_out4p0 = (n_out3p0 * vec4(vec3(n_out2p0, 0.0), 1.0)).xyz;
-
-
-// VaryingSetter:5
-	var_WorldPos = vec2(n_out4p0.xy);
-
-
-}
-
-void fragment() {
-// VaryingGetter:2
-	vec2 n_out2p0 = var_WorldPos;
-
-
-	vec2 n_out26p0;
-// Pixelize:26
-	float n_in26p1 = 2.00000;
-	{
-		n_out26p0 = pixelate(n_out2p0.xy, n_in26p1);
-	}
-
-
-// VectorOp:20
-	vec2 n_in20p1 = vec2(16.00000, 16.00000);
-	vec2 n_out20p0 = mod(n_out26p0, n_in20p1);
-
-
-// Clamp:21
-	vec2 n_in21p1 = vec2(-0.00000, -0.00000);
-	vec2 n_in21p2 = vec2(1.00000, 1.00000);
-	vec2 n_out21p0 = clamp(n_out20p0, n_in21p1, n_in21p2);
-
-
-// VectorFunc:27
-	vec2 n_out27p0 = ceil(n_out21p0);
-
-
-// VectorFunc:22
-	vec2 n_out22p0 = vec2(1.0) - n_out27p0;
-
-
-// VectorDecompose:23
-	float n_out23p0 = n_out22p0.x;
-	float n_out23p1 = n_out22p0.y;
-
-
-// FloatOp:18
-	float n_out18p0 = n_out23p0 + n_out23p1;
-
-
-// FloatFunc:41
-	float n_out41p0 = ceil(n_out18p0);
-
-
-// Input:6
-	vec4 n_out6p0 = COLOR;
-
-
-// VectorDecompose:7
-	float n_out7p0 = n_out6p0.x;
-	float n_out7p1 = n_out6p0.y;
-	float n_out7p2 = n_out6p0.z;
-	float n_out7p3 = n_out6p0.w;
-
-
-// FloatOp:19
-	float n_out19p0 = n_out41p0 * n_out7p3;
-
-
-// Output:0
-	COLOR.a = n_out19p0;
-
-
-}
-"
 mode = 1
 flags/light_only = false
 varyings/WorldPos = "0,3"
