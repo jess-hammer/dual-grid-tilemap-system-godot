@@ -1,84 +1,174 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 using static TileType;
+using static TerrainType;
 
-public partial class DualGridTilemap : Node2D {
-    [Export] TileMapLayer worldMapLayer;
-    [Export] TileMapLayer displayMapLayer;
-    [Export] public Vector2I grassPlaceholderAtlasCoord;
-    [Export] public Vector2I dirtPlaceholderAtlasCoord;
-    readonly Vector2I[] NEIGHBOURS = new Vector2I[] { new(0, 0), new(1, 0), new(0, 1), new(1, 1) };
+[Tool]
+public partial class DualGridTilemap : Node2D
+{
+    public static readonly int TILE_SIZE = 16;
+    public static readonly int HALF_TILE_SIZE = TILE_SIZE / 2;
+    readonly Vector2I[] NEIGHBOURS = [new(0, 0), new(1, 0), new(0, 1), new(1, 1)];
 
-    readonly Dictionary<Tuple<TileType, TileType, TileType, TileType>, Vector2I> neighboursToAtlasCoord = new() {
-        {new (Grass, Grass, Grass, Grass), new Vector2I(2, 1)}, // All corners
-        {new (Dirt, Dirt, Dirt, Grass), new Vector2I(1, 3)}, // Outer bottom-right corner
-        {new (Dirt, Dirt, Grass, Dirt), new Vector2I(0, 0)}, // Outer bottom-left corner
-        {new (Dirt, Grass, Dirt, Dirt), new Vector2I(0, 2)}, // Outer top-right corner
-        {new (Grass, Dirt, Dirt, Dirt), new Vector2I(3, 3)}, // Outer top-left corner
-        {new (Dirt, Grass, Dirt, Grass), new Vector2I(1, 0)}, // Right edge
-        {new (Grass, Dirt, Grass, Dirt), new Vector2I(3, 2)}, // Left edge
-        {new (Dirt, Dirt, Grass, Grass), new Vector2I(3, 0)}, // Bottom edge
-        {new (Grass, Grass, Dirt, Dirt), new Vector2I(1, 2)}, // Top edge
-        {new (Dirt, Grass, Grass, Grass), new Vector2I(1, 1)}, // Inner bottom-right corner
-        {new (Grass, Dirt, Grass, Grass), new Vector2I(2, 0)}, // Inner bottom-left corner
-        {new (Grass, Grass, Dirt, Grass), new Vector2I(2, 2)}, // Inner top-right corner
-        {new (Grass, Grass, Grass, Dirt), new Vector2I(3, 1)}, // Inner top-left corner
-        {new (Dirt, Grass, Grass, Dirt), new Vector2I(2, 3)}, // Bottom-left top-right corners
-        {new (Grass, Dirt, Dirt, Grass), new Vector2I(0, 1)}, // Top-left down-right corners
-		{new (Dirt, Dirt, Dirt, Dirt), new Vector2I(0, 3)}, // No corners
+    private static readonly Dictionary<(TileType, TileType, TileType, TileType), Vector2I> neighboursToAtlasCoord = new() {
+        { ( Some, Some, Some, Some ), new Vector2I(2, 1) }, // All corners
+        { ( None, None, None, Some ), new Vector2I(1, 3) }, // Outer bottom-right corner
+        { ( None, None, Some, None ), new Vector2I(0, 0) }, // Outer bottom-left corner
+        { ( None, Some, None, None ), new Vector2I(0, 2) }, // Outer top-right corner
+        { ( Some, None, None, None ), new Vector2I(3, 3) }, // Outer top-left corner
+        { ( None, Some, None, Some ), new Vector2I(1, 0) }, // Right edge
+        { ( Some, None, Some, None ), new Vector2I(3, 2) }, // Left edge
+        { ( None, None, Some, Some ), new Vector2I(3, 0) }, // Bottom edge
+        { ( Some, Some, None, None ), new Vector2I(1, 2) }, // Top edge
+        { ( None, Some, Some, Some ), new Vector2I(1, 1) }, // Inner bottom-right corner
+        { ( Some, None, Some, Some ), new Vector2I(2, 0) }, // Inner bottom-left corner
+        { ( Some, Some, None, Some ), new Vector2I(2, 2) }, // Inner top-right corner
+        { ( Some, Some, Some, None ), new Vector2I(3, 1) }, // Inner top-left corner
+        { ( None, Some, Some, None ), new Vector2I(2, 3) }, // Bottom-left top-right corners
+        { ( Some, None, None, Some ), new Vector2I(0, 1) }, // Top-left down-right corners
+        { ( None, None, None, None ), new Vector2I(-1, -1) } // No corners, will be treated as empty tile
     };
 
-    public override void _Ready() {
-        // Refresh all display tiles
-        foreach (Vector2I coord in worldMapLayer.GetUsedCells()) {
-            setDisplayTile(coord);
+    [Export] TileMapLayer worldMapLayer; // should be set in the editor
+    [Export] TileMapLayer grassDisplayMapLayer; // should be set in the editor
+    [Export] TileMapLayer dirtDisplayMapLayer; // should be set in the editor
+    [Export] TileMapLayer sandDisplayMapLayer; // should be set in the editor
+    [Export] public Vector2I grassPlaceholderAtlasCoords; // should be set in the editor
+    [Export] public Vector2I dirtPlaceholderAtlasCoords; // should be set in the editor
+    [Export] public Vector2I sandPlaceholderAtlasCoords; // should be set in the editor
+    int placeholderSourceId = 0;
+
+    public override void _Ready()
+    {
+        RefreshAllTiles();
+    }
+
+    public void RefreshAllTiles()
+    {
+        foreach (Vector2I cellPos in worldMapLayer.GetUsedCells())
+        {
+            // Refresh each display layer with its own terrain type
+            // This ensures each layer recalculates based on matching neighbors
+            RefreshDisplayTile(cellPos, grassDisplayMapLayer, Grass);
+            RefreshDisplayTile(cellPos, dirtDisplayMapLayer, Dirt);
+            RefreshDisplayTile(cellPos, sandDisplayMapLayer, Sand);
         }
     }
 
-    /// <summary>
-    /// <para>Returns the map coordinates of the cell containing the given <paramref name="localPosition"/>. If <paramref name="localPosition"/> is in global coordinates, consider using <see cref="Godot.Node2D.ToLocal(Vector2)"/> before passing it to this method. See also <see cref="Godot.TileMapLayer.MapToLocal(Vector2I)"/>.</para>
-    /// </summary>
+    public override void _Process(double delta)
+    {
+        // optional - allows you to see changes in editor but may be costly
+        if (Engine.IsEditorHint())
+        {
+            RefreshAllTiles();
+        }
+    }
+
     public Vector2I LocalToMap(Vector2 pos)
     {
         return worldMapLayer.LocalToMap(pos);
     }
 
-    public void SetTile(Vector2I coords, Vector2I atlasCoords) {
-        worldMapLayer.SetCell(coords, 0, atlasCoords);
-        setDisplayTile(coords);
-    }
+    public void SetTile(Vector2I coords, TerrainType terrainType)
+    {
+        TerrainType oldTerrainType = GetTerrainType(coords);
 
-    void setDisplayTile(Vector2I pos) {
-        // loop through 4 display neighbours
-        for (int i = 0; i < NEIGHBOURS.Length; i++) {
-            Vector2I newPos = pos + NEIGHBOURS[i];
-            displayMapLayer.SetCell(newPos, 1, calculateDisplayTile(newPos));
+        worldMapLayer.SetCell(coords, placeholderSourceId, GetPlaceholderAtlasCoords(terrainType));
+        RefreshDisplayTile(coords, GetDisplayLayer(terrainType), terrainType);
+
+        // Refresh old display tiles if changing terrain type
+        if (oldTerrainType != terrainType && oldTerrainType != Empty)
+        {
+            RefreshDisplayTile(coords, GetDisplayLayer(oldTerrainType), oldTerrainType);
         }
     }
 
-    Vector2I calculateDisplayTile(Vector2I coords) {
+    void RefreshDisplayTile(Vector2I pos, TileMapLayer displayLayer, TerrainType terrainType)
+    {
+        // loop through 4 display neighbours
+        for (int i = 0; i < NEIGHBOURS.Length; i++)
+        {
+            Vector2I newPos = pos + NEIGHBOURS[i];
+            Vector2I atlasCoords = CalculateDisplayTileAtlasCoords(newPos, terrainType);
+            displayLayer.SetCell(newPos, (int)terrainType, atlasCoords);
+        }
+    }
+
+    Vector2I CalculateDisplayTileAtlasCoords(Vector2I coords, TerrainType terrainType)
+    {
         // get 4 world tile neighbours
-        TileType botRight = getWorldTile(coords - NEIGHBOURS[0]);
-        TileType botLeft = getWorldTile(coords - NEIGHBOURS[1]);
-        TileType topRight = getWorldTile(coords - NEIGHBOURS[2]);
-        TileType topLeft = getWorldTile(coords - NEIGHBOURS[3]);
+        TileType botRight = GetMatchingTileType(coords - NEIGHBOURS[0], terrainType);
+        TileType botLeft = GetMatchingTileType(coords - NEIGHBOURS[1], terrainType);
+        TileType topRight = GetMatchingTileType(coords - NEIGHBOURS[2], terrainType);
+        TileType topLeft = GetMatchingTileType(coords - NEIGHBOURS[3], terrainType);
 
         // return tile (atlas coord) that fits the neighbour rules
         return neighboursToAtlasCoord[new(topLeft, topRight, botLeft, botRight)];
     }
 
-    TileType getWorldTile(Vector2I coords) {
+    TileType GetMatchingTileType(Vector2I coords, TerrainType terrainType)
+    {
+        Vector2I targetPlaceholderAtlasCoords = GetPlaceholderAtlasCoords(terrainType);
         Vector2I atlasCoord = worldMapLayer.GetCellAtlasCoords(coords);
-        if (atlasCoord == grassPlaceholderAtlasCoord)
-            return Grass;
+        if (atlasCoord != targetPlaceholderAtlasCoords)
+            return None;
         else
-            return Dirt;
+            return Some;
+    }
+
+    Vector2I GetPlaceholderAtlasCoords(TerrainType terrainType)
+    {
+        return terrainType switch
+        {
+            Grass => grassPlaceholderAtlasCoords,
+            Dirt => dirtPlaceholderAtlasCoords,
+            Sand => sandPlaceholderAtlasCoords,
+            _ => -Vector2I.One
+        };
+    }
+
+    TileMapLayer GetDisplayLayer(TerrainType terrainType)
+    {
+        return terrainType switch
+        {
+            Grass => grassDisplayMapLayer,
+            Dirt => dirtDisplayMapLayer,
+            Sand => sandDisplayMapLayer,
+            _ => null
+        };
+    }
+
+    TerrainType GetTerrainType(Vector2I cellPos)
+    {
+        Vector2I placeholderAtlasCoords = worldMapLayer.GetCellAtlasCoords(cellPos);
+        switch (placeholderAtlasCoords)
+        {
+            case var coords when coords == grassPlaceholderAtlasCoords:
+                return Grass;
+            case var coords when coords == dirtPlaceholderAtlasCoords:
+                return Dirt;
+            case var coords when coords == sandPlaceholderAtlasCoords:
+                return Sand;
+            case var coords when coords == -Vector2I.One:
+                return Empty;
+            default:
+                GD.PrintErr($"Unknown placeholder atlas coords: {placeholderAtlasCoords}. Defaulting to Grass.");
+                return Grass;
+        }
     }
 }
 
-public enum TileType {
+public enum TileType
+{
     None,
-    Grass,
-    Dirt
+    Some,
+}
+
+// The number should correspond to the sourceId in the TileSet
+public enum TerrainType
+{
+    Empty = -1,
+    Grass = 1,
+    Dirt = 2,
+    Sand = 3,
 }
